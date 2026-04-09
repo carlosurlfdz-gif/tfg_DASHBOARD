@@ -1,0 +1,85 @@
+:root{
+  --bg-0:#070a14;
+  --bg-1:#090f20;
+  --card:#0f1d3a;
+  --card-2:#0c1730;
+  --border:#1b3c72;
+  --border-soft:#17305d;
+  --text:#eaf1ff;
+  --muted:#9bb2d6;
+  --muted-2:#7f97bf;
+
+  --accent:#ef4463;
+  --accent-2:#ff4f6f;
+
+  --field:#0c1630;
+  --field-border:#1c3b6f;
+  --field-focus:#2b66c6;
+
+  --link:#4aa8ff;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 20% 15%, rgba(65,135,255,.10), transparent 60%),
+    radial-gradient(700px 450px at 75% 80%, rgba(255,80,120,.10), transparent 60%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1));
+}
+
+.page{
+  min-height:100%;
+  display:grid;
+  place-items:center;
+  padding: 32px 16px;
+}
+
+.login-card{
+  width:min(520px, 94vw);
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.06)), var(--card);
+  border:1px solid rgba(54, 104, 178, .35);
+  border-radius: 10px;
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.55),
+    0 0 0 1px rgba(40, 120, 255, .10) inset;
+  padding: 32px 42px 26px;
+  position:relative;
+}
+
+.brand{ text-align:center; margin-bottom: 22px; }
+.brand__icon{ width:52px; height:52px; display:grid; place-items:center; margin: 0 auto 10px; color: var(--accent); filter: drop-shadow(0 10px 18px rgba(239, 68, 99, .18)); }
+.brand__title{ margin: 0; font-weight: 800; letter-spacing: 2px; font-size: 28px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+.brand__subtitle{ margin: 10px 0 0; color: var(--muted-2); font-size: 14.5px; }
+
+.form{ margin-top: 18px; }
+.field{ display:block; margin: 0 0 18px; }
+.field__label{ display:block; margin: 0 0 8px; font-weight: 700; color: var(--text); font-size: 14px; }
+
+.input{ display:flex; align-items:center; gap: 10px; height: 54px; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.12)), var(--field); border: 1px solid rgba(70, 130, 220, .35); border-radius: 4px; padding: 0 14px; transition: border-color .18s ease, box-shadow .18s ease; }
+.input__icon{ color: rgba(210, 225, 255, .65); display:grid; place-items:center; width:22px; }
+.input input{ width:100%; height:100%; border:0; outline:0; background:transparent; color: var(--text); font-size: 18px; padding: 0; }
+.input input::placeholder{ color: rgba(210, 225, 255, .45); }
+.input:focus-within{ border-color: rgba(74, 168, 255, .75); box-shadow: 0 0 0 3px rgba(74, 168, 255, .14); }
+.input--password{ padding-right: 8px; }
+.input__action{ width: 42px; height: 42px; border:0; background: transparent; color: rgba(210, 225, 255, .55); display:grid; place-items:center; cursor:pointer; border-radius: 8px; transition: background .15s ease, color .15s ease; }
+.input__action:hover{ background: rgba(255,255,255,.06); color: rgba(210, 225, 255, .85); }
+.eye--closed{ display:none; }
+
+.btn{ width:100%; height: 54px; border-radius: 4px; border: 1px solid transparent; cursor:pointer; font-weight: 800; letter-spacing: .6px; font-size: 15px; transition: transform .08s ease, filter .15s ease, background .15s ease, border-color .15s ease; }
+.btn:active{ transform: translateY(1px); }
+.btn--primary{ background: var(--accent); color: #fff; box-shadow: 0 14px 32px rgba(239, 68, 99, .20); }
+.btn--primary:hover{ filter: brightness(1.02); background: var(--accent-2); }
+.link{ display:block; text-align:center; margin: 14px 0 18px; color: var(--link); text-decoration:none; font-size: 14px; }
+.link:hover{ text-decoration: underline; }
+.divider{ display:flex; align-items:center; gap: 12px; margin: 10px 0 16px; color: rgba(210, 225, 255, .40); }
+.divider__line{ height: 1px; flex:1; background: rgba(210, 225, 255, .12); }
+.divider__text{ font-size: 13px; }
+.btn--secondary{ background: transparent; border-color: rgba(70, 130, 220, .35); color: rgba(235, 245, 255, .92); }
+.btn--secondary:hover{ background: rgba(255,255,255,.04); border-color: rgba(74, 168, 255, .55); }
+.btn__icon{ display:inline-grid; place-items:center; vertical-align:middle; margin-right: 10px; opacity: .95; }
+.footer{ margin: 18px 0 0; text-align:center; color: rgba(210, 225, 255, .32); font-size: 12.5px; }
+@media (max-width: 520px){ .login-card{ padding: 26px 18px 20px; } .brand__title{ font-size: 24px; } .input input{ font-size: 16px; } }
