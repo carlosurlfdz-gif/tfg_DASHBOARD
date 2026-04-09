@@ -51,16 +51,38 @@ class DashboardController extends Controller
             ->orderBy('total', 'desc')
             ->limit(5)
             ->get();
-dump($top_ips);
+        //Tipos de alertas
+        $alertas_tipos= Alerta::select('categoria', DB::raw('COUNT(*) as total'))
+            ->whereNotNull('categoria')
+            ->groupBy('categoria')
+            ->get()
+            ->pluck('total', 'categoria')
+            ->toArray();
+        foreach ($alertas_tipos as $categoria => $total) {
+            $portencajes[$categoria] = round(($total / array_sum($alertas_tipos)) * 100,0);
+            
+        }
+        //Ultimas alertas
+
+        $ultimas_alertas = Alerta::orderBy('timestamp_evento', 'desc')
+            ->limit(5)
+            ->get();
+        
         return [
                 'horas' => $horas,
                 'accesos_data' => $accesos_data,
                 'tipo_alertas' => $tipo_alertas,
                 'diferencia_alertas' => $diferencia_alertas,
-                'top_ips' => $top_ips
-
+                'top_ips' => $top_ips,
+                'alertas_tipos' => $alertas_tipos,
+                'portencajes' => $portencajes,
+                'ultimas_alertas' => $ultimas_alertas
             ];
+        
+    
+    
     }
+        
 
     public function index()
     {

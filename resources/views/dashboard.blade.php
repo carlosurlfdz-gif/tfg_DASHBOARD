@@ -85,158 +85,93 @@ TRÁFICO DE RED (Últimas 24h)
 
 
 <!-- TOP ATACANTES + ALERTAS -->
-
 <div class="grid grid-cols-3 gap-6">
 
-<!-- TOP ATACANTES -->
+    <!-- TOP ATACANTES -->
+    <div class="col-span-2 bg-slate-800 p-6 rounded-xl">
 
-<div class="col-span-2 bg-slate-800 p-6 rounded-xl">
+        <h2 class="font-semibold mb-6">
+            TOP 5 IP ATACANTES
+        </h2>
 
-<h2 class="font-semibold mb-6">
-TOP 5 IP ATACANTES
-</h2>
+        <div class="space-y-5 text-sm">
+            @foreach ($top_ips as $ip)
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span>{{ $ip->src_ip }}</span>
+                        <span class="text-gray-400">{{ $ip->total }} ataques</span>
+                    </div>
 
-<div class="space-y-5 text-sm">
-
-@foreach ($top_ips as $ip)
-    <div>
-
-    <div class="flex justify-between mb-1">
-
-    <span>{{ $ip->src_ip }}</span>
-
-    <span class="text-gray-400">{{ $ip->total }} ataques</span>
-
-    </div>
-
-    <div class="bg-gray-700 h-2 rounded">
-
-    <div class="bg-red-500 h-2 rounded w-[90%]"></div>
+                    <div class="bg-gray-700 h-2 rounded">
+                        <div class="bg-red-500 h-2 rounded w-[90%]"></div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
     </div>
 
+    <!-- ALERTAS POR TIPO -->
+    <div class="bg-slate-800 p-6 rounded-xl">
+
+        <h2 class="font-semibold mb-4">
+            ALERTAS POR TIPO
+        </h2>
+
+        <canvas id="alertChart"></canvas>
+
+        <div class="mt-4 space-y-2 text-sm">
+            @php
+                $colores = ['#ef4444','#f59e0b','#3b82f6','#22c55e'];
+            @endphp
+
+            @foreach ($alertas_tipos as $categoria => $total)
+                <div class="flex justify-between">
+                    <span class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full"
+                              style="background-color: {{ $colores[$loop->index % count($colores)] }};">
+                        </span>
+                        {{ $categoria }}
+                    </span>
+                    <span>{{ $portencajes[$categoria] }}%</span>
+                </div>
+            @endforeach
+        </div>
+
     </div>
-@endforeach
-</div>
-
-<!-- ALERTAS POR TIPO -->
-
-<div class="bg-slate-800 p-6 rounded-xl">
-
-<h2 class="font-semibold mb-4">
-ALERTAS POR TIPO
-</h2>
-
-<canvas id="alertChart"></canvas>
-
-<div class="mt-4 space-y-2 text-sm">
-
-<div class="flex justify-between">
-<span class="flex items-center gap-2">
-<span class="w-3 h-3 bg-red-500 rounded-full"></span>
-Port Scan
-</span>
-<span>40%</span>
-</div>
-
-<div class="flex justify-between">
-<span class="flex items-center gap-2">
-<span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-Brute Force
-</span>
-<span>30%</span>
-</div>
-
-<div class="flex justify-between">
-<span class="flex items-center gap-2">
-<span class="w-3 h-3 bg-blue-500 rounded-full"></span>
-Malware
-</span>
-<span>20%</span>
-</div>
-
-<div class="flex justify-between">
-<span class="flex items-center gap-2">
-<span class="w-3 h-3 bg-green-500 rounded-full"></span>
-DDoS
-</span>
-<span>10%</span>
-</div>
 
 </div>
-
-</div>
-
-</div>
-
-
 
 <!-- ALERTAS TIEMPO REAL -->
-
 <div class="bg-slate-800 p-6 rounded-xl">
 
-<h2 class="font-semibold mb-6">
-ÚLTIMAS ALERTAS EN TIEMPO REAL
-</h2>
+    <h2 class="font-semibold mb-6">
+        ÚLTIMAS ALERTAS EN TIEMPO REAL
+    </h2>
 
+    <div class="space-y-4">
+        @foreach ($ultimas_alertas as $alerta)
 
-<div class="space-y-4">
+            <div class="bg-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-900/30 
+                        border border-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-500 
+                        p-4 rounded">
 
-<div class="bg-red-900/30 border border-red-500 p-4 rounded">
+                <p class="text-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-400 text-sm">
+                    {{ $alerta->severidad == 1 ? 'CRÍTICA' : ($alerta->severidad == 2 ? 'ALTA' : ($alerta->severidad == 3 ? 'MEDIA' : 'BAJA')) }}
+                </p>
 
-<p class="text-red-400 font-semibold">
-CRÍTICA
-</p>
+                <p class="mt-1">
+                    {{ $alerta->categoria }}
+                </p>
 
-<p class="mt-1">
-Intento de explotación SQL Injection
-</p>
+                <p class="text-sm text-gray-400 mt-1">
+                    Origen: {{ $alerta->src_ip }} → {{ $alerta->dest_ip }}
+                </p>
 
-<p class="text-sm text-gray-400 mt-1">
-Origen: 203.0.113.45 → 192.168.1.100
-</p>
+            </div>
 
-</div>
-
-
-
-<div class="bg-yellow-900/30 border border-yellow-500 p-4 rounded">
-
-<p class="text-yellow-400 font-semibold">
-ALTA
-</p>
-
-<p class="mt-1">
-Fuerza bruta SSH detectada
-</p>
-
-<p class="text-sm text-gray-400 mt-1">
-Origen: 185.91.10.22 → 10.0.0.5:22
-</p>
-
-</div>
-
-
-
-<div class="bg-yellow-900/30 border border-yellow-500 p-4 rounded">
-
-<p class="text-yellow-400 font-semibold">
-ALTA
-</p>
-
-<p class="mt-1">
-Escaneo de puertos (Nmap)
-</p>
-
-<p class="text-sm text-gray-400 mt-1">
-Origen: 192.168.1.180 → 10.0.0.24
-</p>
-
-</div>
-
-</div>
-
-</div>
+        @endforeach
+    </div>
 
 </div>
 
@@ -279,9 +214,18 @@ const ctx2 = document.getElementById('alertChart');
 new Chart(ctx2,{
 type:'doughnut',
 data:{
-labels:['Port Scan','Brute Force','Malware','DDoS'],
+//labels:['Port Scan','Brute Force','Malware','DDoS'],
+labels:[
+    @foreach($alertas_tipos as $tipo => $count)
+        '{{ $tipo }}',
+    @endforeach
+],
 datasets:[{
-data:[40,30,20,10],
+data:[
+    @foreach($alertas_tipos as $tipo => $count)
+        {{ $count }},
+    @endforeach
+],
 backgroundColor:[
 '#ef4444',
 '#f59e0b',
