@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIEM SCALE PROJECT - Login</title>
+  <!-- Cargar recursos con Vite -->
   @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/login.css', 'resources/js/login.js'])
 </head>
 
@@ -38,6 +39,7 @@
             <span class="field__label">Usuario</span>
             <div class="input">
                 <span class="input__icon" aria-hidden="true">
+                  <!-- Icono de usuario -->
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                     <path d="M12 13a5 5 0 1 0-5-5 5 5 0 0 0 5 5z" stroke="currentColor" stroke-width="1.8"
@@ -54,6 +56,7 @@
           <span class="field__label">Contraseña</span>
           <div class="input input--password">
             <span class="input__icon" aria-hidden="true">
+                <!-- Icono de contraseña -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M7.5 14.5a4.5 4.5 0 1 1 3.9-6.8l9.1 0v3h-2v2h-2v2h-2.1" stroke="currentColor"
                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -65,12 +68,14 @@
               autocomplete="current-password" />
 
             <button class="input__action" type="button" id="togglePassword" aria-label="Mostrar contraseña">
+              <!-- Icono mostrar/ocultar contraseña -->
               <svg class="eye eye--open" width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.8"
                   stroke-linejoin="round" />
                 <path d="M12 15a3 3 0 1 0-3-3 3 3 0 0 0 3 3z" stroke="currentColor" stroke-width="1.8"
                   stroke-linejoin="round" />
               </svg>
+              <!-- Icono ocultar contraseña -->
               <svg class="eye eye--closed" width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                 <path d="M2 12s3.5-7 10-7c2.2 0 4.1.7 5.7 1.7" stroke="currentColor" stroke-width="1.8"

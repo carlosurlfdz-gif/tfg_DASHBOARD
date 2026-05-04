@@ -15,17 +15,13 @@ use Illuminate\Support\Facades\Route;
 
 // Ruta principal de la aplicación
 Route::get('/', function () {
-    return view('auth.login');
-});
+    return auth()->check() ? redirect('/dashboard') : view('auth.login');
+})->name('home');
 
 
 // Ruta del dashboard
-Route::get('/dashboard', function () {
-    
-    return view('dashboard');
-
-    // Solo puede acceder un usuario autenticado
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 
 // Grupo de rutas para usuarios no logueados 
@@ -91,7 +87,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// Otro grupo de rutas protegido por autenticación
+// Grupo de rutas protegido por autenticación
 Route::middleware('auth')->group(function () {
 
     // Muestra el formulario de edición del perfil
