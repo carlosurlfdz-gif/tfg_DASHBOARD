@@ -26,23 +26,22 @@ class DashboardController extends Controller
         //Calcular criticidad de accesos por IP
         $alertas= Alerta::all();
         $tipo_alertas = $diferencia_alertas = [];
-        
+
         for ($i=1; $i<=4; $i++){
             $tipo_alertas[$i] = 0;
             $alertas_ayer = Alerta::whereBetween('timestamp_evento', [
                     Carbon::yesterday(),
                     Carbon::today()
                 ])
-                ->where('severidad', $i)
+                ->where('severity', $i)
                 ->count();
             $alertas_hoy = Alerta::where('timestamp_evento', '>=', Carbon::today())
-                ->where('severidad', $i)
+                ->where('severity', $i)
                 ->count();
             $diferencia_alertas[$i] = $alertas_hoy - $alertas_ayer;
-
         }
         foreach ($alertas as $alerta){
-            $tipo_alertas[$alerta->severidad]++;
+            $tipo_alertas[$alerta->severity]++;
         }
 
         //TOP 5 IPs con más alertas
@@ -76,7 +75,8 @@ class DashboardController extends Controller
                 'top_ips' => $top_ips,
                 'alertas_tipos' => $alertas_tipos,
                 'portencajes' => $portencajes,
-                'ultimas_alertas' => $ultimas_alertas
+                'ultimas_alertas' => $ultimas_alertas,
+                'prioridades' => Alerta::prioridadTexto()
             ];
         
     

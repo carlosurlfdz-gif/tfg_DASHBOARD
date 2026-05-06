@@ -32,7 +32,7 @@ return new class extends Migration {
 
             $table->string('categoria', 255)->nullable();
 
-            $table->unsignedTinyInteger('severidad');
+            $table->unsignedTinyInteger('severity');
 
             $table->enum('estado', [
                 'nueva',

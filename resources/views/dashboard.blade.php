@@ -15,8 +15,8 @@
 SIEM SCALE PROJECT
 </h1>
 
-<a class="text-red-400 border-b border-red-400 pb-1">Dashboard</a>
-<a class="text-gray-300">Alertas</a>
+<a href="{{url('/dashboard')}}" class="text-red-400 border-b border-red-400 pb-1">Dashboard</a>
+<a href="{{url('/alertas')}}" class="text-gray-300">Alertas</a>
 <a class="text-gray-300">Logs</a>
 
 </div>
@@ -42,19 +42,19 @@ VPN
 <!-- STATS -->
 <div class="grid grid-cols-4 gap-6">
 
-    @foreach ($tipo_alertas as $severidad => $count)
+    @foreach ($tipo_alertas as $severity => $count)
         <div class="bg-slate-800 p-6 rounded-xl">
-            <p class="text-{{ $severidad == 1 ? 'red' : ($severidad == 2 ? 'yellow' : ($severidad == 3 ? 'blue' : 'green')) }}-400 text-sm">
-                {{ $severidad == 1 ? 'CRÍTICAS' : ($severidad == 2 ? 'ALTAS' : ($severidad == 3 ? 'MEDIAS' : 'BAJAS')) }}
+            <p class="text-{{ $severity == 1 ? 'red' : ($severity == 2 ? 'yellow' : ($severity == 3 ? 'blue' : 'green')) }}-400 text-sm">
+                {{ $severity == 1 ? 'CRÍTICAS' : ($severity == 2 ? 'ALTAS' : ($severity == 3 ? 'MEDIAS' : 'BAJAS')) }}
             </p>
             <h2 class="text-4xl font-bold mt-2">{{ $count }}</h2>
-            @if ($diferencia_alertas[$severidad]>=0)
+            @if ($diferencia_alertas[$severity]>=0)
                 <p class="text-green-400 text-sm mt-2">
-                    +{{ $diferencia_alertas[$severidad] }} hoy
+                    +{{ $diferencia_alertas[$severity] }} hoy
                 </p>
             @else
                 <p class="text-red-400 text-sm mt-2">
-                    {{ $diferencia_alertas[$severidad] }} hoy
+                    {{ $diferencia_alertas[$severity] }} hoy
                 </p>
             @endif
         </div>  
@@ -152,12 +152,13 @@ TRÁFICO DE RED (Últimas 24h)
     <div class="space-y-4">
         @foreach ($ultimas_alertas as $alerta)
 
-            <div class="bg-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-900/30 
-                        border border-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-500 
+            <div class="bg-{{ $alerta->severity == 1 ? 'red' : ($alerta->severity == 2 ? 'yellow' : ($alerta->severity == 3 ? 'blue' : 'green')) }}-900/30 
+                        border border-{{ $alerta->severity == 1 ? 'red' : ($alerta->severity == 2 ? 'yellow' : ($alerta->severity == 3 ? 'blue' : 'green')) }}-500 
                         p-4 rounded">
 
-                <p class="text-{{ $alerta->severidad == 1 ? 'red' : ($alerta->severidad == 2 ? 'yellow' : ($alerta->severidad == 3 ? 'blue' : 'green')) }}-400 text-sm">
-                    {{ $alerta->severidad == 1 ? 'CRÍTICA' : ($alerta->severidad == 2 ? 'ALTA' : ($alerta->severidad == 3 ? 'MEDIA' : 'BAJA')) }}
+                <p class="text-{{ $alerta->severity == 1 ? 'red' : ($alerta->severity == 2 ? 'yellow' : ($alerta->severity == 3 ? 'blue' : 'green')) }}-400 text-sm">
+                    {{-- {{ $alerta->severity == 1 ? 'CRÍTICA' : ($alerta->severity == 2 ? 'ALTA' : ($alerta->severity == 3 ? 'MEDIA' : 'BAJA')) }} --}}
+                    {{ $prioridades[$alerta->severity] }}
                 </p>
 
                 <p class="mt-1">
