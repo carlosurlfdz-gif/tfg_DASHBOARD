@@ -1,0 +1,13 @@
+[Unit]
+Description=Fetch Suricata Eve Logs from pfSense via SSH
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/fetch_eve.sh
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target
