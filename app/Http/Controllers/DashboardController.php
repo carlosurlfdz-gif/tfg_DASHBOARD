@@ -16,11 +16,10 @@ class DashboardController extends Controller
         $horas = $accesos_data= [];
         for ($i=0;$i<=24;$i +=2){
             $horas[]= $i < 10 ? '0'.$i : $i;
-            $accesos= LogAcceso::select('*')
-            ->where('fecha_acceso', '<=', Carbon::now()->subHours($i))
-            ->where('fecha_acceso', '>', Carbon::now()->subHours($i+2)) 
-            ->get();
-            $accesos_data[] = $accesos->count();
+            $accesos = Alerta::where('timestamp_evento', '<=', Carbon::now()->subHours($i))
+            ->where('timestamp_evento', '>', Carbon::now()->subHours($i+2))
+            ->count();
+$accesos_data[] = $accesos;
         }
         
         //Calcular criticidad de accesos por IP
