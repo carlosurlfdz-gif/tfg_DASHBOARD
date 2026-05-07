@@ -99,17 +99,25 @@
                     @foreach ($alertas as $alerta)
 
                         @php
-                            $colorCaja = $alerta->severity == 1
-                                ? 'critical'
-                                : ($alerta->severity == 2
-                                    ? 'high'
-                                    : ($alerta->severity == 3
-                                        ? 'medium'
-                                        : 'low'));
+                            $severityLabel = $alerta->severity_label
+                                ?? ($prioridades[$alerta->severity] ?? 'DESCONOCIDA');
 
-                            $textoCaja = $prioridades[$alerta->severity] ?? 'DESCONOCIDA';
+                            $normalizedLabel = strtoupper(trim($severityLabel));
+                            $colorCaja = match ($normalizedLabel) {
+                                'CRÍTICA', 'CRITICA' => 'critical',
+                                'ALTA' => 'high',
+                                'MEDIA' => 'medium',
+                                'BAJA' => 'low',
+                                default => ($alerta->severity == 1
+                                    ? 'critical'
+                                    : ($alerta->severity == 2
+                                        ? 'high'
+                                        : ($alerta->severity == 3
+                                            ? 'medium'
+                                            : 'low'))),
+                            };
+
                             $badgeClass = 'badge-' . $colorCaja;
-                            $severityLabel = $alerta->severity_label ?? $textoCaja;
                         @endphp
 
                         <article class="alert-card">

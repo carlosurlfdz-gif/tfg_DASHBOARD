@@ -20,12 +20,20 @@ class AlertasController extends Controller
     public function filtrar(Request $request)
     {
         $query = Alerta::query();
-        //Que campo hay que buscar aqui
+        //Buscar por categoría
         if ($request->filled('buscar')) {
             $query->where('categoria', 'like', '%' . $request->buscar . '%');
         }
         if ($request->filled('prioridad')) {
-            $query->where('severity', $request->prioridad);
+            $prioridades = Alerta::prioridadTexto();
+            $seleccion = $request->prioridad;
+
+            if (is_numeric($seleccion) && isset($prioridades[(int)$seleccion])) {
+                $label = mb_strtolower($prioridades[(int)$seleccion], 'UTF-8');
+                $query->whereRaw('LOWER(severity_label) = ?', [$label]);
+            } else {
+                $query->whereRaw('LOWER(severity_label) = ?', [mb_strtolower($seleccion, 'UTF-8')]);
+            }
         }
         if ($request->filled('tipo')) {
             $query->where('tipo', $request->tipo);
