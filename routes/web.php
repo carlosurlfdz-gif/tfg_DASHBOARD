@@ -1,29 +1,22 @@
 <?php
-// Definimos las rutas HTTP
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AlertasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\PasswordController;
-use Illuminate\Support\Facades\Route;
 
-
-// Ruta principal de la aplicación
 Route::get('/', function () {
-    return auth()->check() ? redirect('/dashboard') : view('auth.login');
-})->name('home');
+    // Redirige a dashboard si el usuario está autenticado, de lo contrario a login
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
+});
 
-
-// Ruta del dashboard
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
-
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');;
+Route::get('/alertas', [AlertasController::class, 'index'])->middleware(['auth', 'verified'])->name('alertas');
+Route::post('/filtro-alertas', [AlertasController::class, 'filtrar'])->middleware(['auth', 'verified']);
+Route::delete('/alertas/{alerta}', [AlertasController::class, 'destroy'])->middleware(['auth', 'verified'])->name('alertas.destroy');
 // Grupo de rutas para usuarios no logueados 
 Route::middleware('guest')->group(function () {
 
