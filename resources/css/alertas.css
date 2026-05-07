@@ -13,8 +13,8 @@
 }
 
 .page-title {
-    font-family: "sans-serif" !important;
-    /* font-size: clamp(1.3rem, 1.7vw, 1.85rem); */
+    font-family: "Segoe UI" !important;
+    font-size: clamp(1.3rem, 1.7vw, 1.85rem); */
     font-weight: 700!important;
     color: #f1f5f9;
     letter-spacing: 0!important;
