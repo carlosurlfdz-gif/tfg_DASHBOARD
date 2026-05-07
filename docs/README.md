@@ -40,6 +40,6 @@ Sigue estos pasos en la **VM3 (Ubuntu)**:
 
 # 🛡️ SIEM Dashboard: Documentación de Scripts y Flujo de Datos
 
-![Diagrama de Arquitectura del SIEM](./images/arquitectura.png)
+![Diagrama de Arquitectura del SIEM](./image.png)
 
 Este repositorio contiene la lógica de extracción, procesamiento e inserción...
