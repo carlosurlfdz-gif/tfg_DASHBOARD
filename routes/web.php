@@ -7,12 +7,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
-    return view('dashboard');
+    // Redirige a dashboard si el usuario está autenticado, de lo contrario a login
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : redirect()->route('login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');;
-Route::get('/alertas', [AlertasController::class, 'index'])->middleware(['auth', 'verified'])->name('alertas');;
-Route::post('/filtro-alertas', [AlertasController::class, 'filtrar']);
+Route::get('/alertas', [AlertasController::class, 'index'])->middleware(['auth', 'verified'])->name('alertas');
+Route::post('/filtro-alertas', [AlertasController::class, 'filtrar'])->middleware(['auth', 'verified']);
+Route::delete('/alertas/{alerta}', [AlertasController::class, 'destroy'])->middleware(['auth', 'verified'])->name('alertas.destroy');
 // Grupo de rutas para usuarios no logueados 
 Route::middleware('guest')->group(function () {
 

@@ -36,4 +36,11 @@ class AlertasController extends Controller
 
         return view('alertas', compact('alertas', 'prioridades'));
     }
+
+    public function destroy(Alerta $alerta)
+    {
+        $alerta->delete();
+
+        return redirect()->route('alertas')->with('success', 'Alerta eliminada correctamente.');
+    }
 }
