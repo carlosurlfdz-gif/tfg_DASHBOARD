@@ -8,26 +8,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\LogAcceso;
 use App\Models\Alerta;
+
 class DashboardController extends Controller
 {
     private function calculos() 
     {
-        //Calcular accesos por horas en las últimas 24 horas
-        $horas = $accesos_data= [];
-        for ($i=0;$i<=24;$i +=2){
-            $horas[]= $i < 10 ? '0'.$i : $i;
+        // Calcular accesos por horas en las últimas 24 horas
+        $horas = $accesos_data = [];
+        for ($i = 0; $i <= 24; $i += 2) {
+            $horas[] = $i < 10 ? '0'.$i : $i;
             $accesos = Alerta::where('timestamp_evento', '<=', Carbon::now()->subHours($i))
-            ->where('timestamp_evento', '>', Carbon::now()->subHours($i+2))
-            ->count();
-$accesos_data[] = $accesos;
+                ->where('timestamp_evento', '>', Carbon::now()->subHours($i + 2))
+                ->count();
+            $accesos_data[] = $accesos;
         }
-        
-        //Calcular criticidad de accesos por IP
-        $alertas= Alerta::all();
+
+        // Calcular criticidad por severidad
         $tipo_alertas = $diferencia_alertas = [];
 
-        for ($i=1; $i<=4; $i++){
-            $tipo_alertas[$i] = 0;
+        for ($i = 1; $i <= 4; $i++) {
+            $tipo_alertas[$i] = Alerta::where('severity', $i)->count();
             $alertas_ayer = Alerta::whereBetween('timestamp_evento', [
                     Carbon::yesterday(),
                     Carbon::today()
@@ -39,54 +39,48 @@ $accesos_data[] = $accesos;
                 ->count();
             $diferencia_alertas[$i] = $alertas_hoy - $alertas_ayer;
         }
-        foreach ($alertas as $alerta){
-            $tipo_alertas[$alerta->severity]++;
-        }
 
-        //TOP 5 IPs con más alertas
+        // TOP 5 IPs con más alertas
         $top_ips = Alerta::select('src_ip', DB::raw('COUNT(*) as total'))
             ->groupBy('src_ip')
             ->orderBy('total', 'desc')
             ->limit(5)
             ->get();
-        //Tipos de alertas
-        $alertas_tipos= Alerta::select('categoria', DB::raw('COUNT(*) as total'))
+
+        // Tipos de alertas
+        $alertas_tipos = Alerta::select('categoria', DB::raw('COUNT(*) as total'))
             ->whereNotNull('categoria')
             ->groupBy('categoria')
             ->get()
             ->pluck('total', 'categoria')
             ->toArray();
-        foreach ($alertas_tipos as $categoria => $total) {
-            $portencajes[$categoria] = round(($total / array_sum($alertas_tipos)) * 100,0);
-            
-        }
-        //Ultimas alertas
 
+        $portencajes = [];
+        foreach ($alertas_tipos as $categoria => $total) {
+            $portencajes[$categoria] = round(($total / array_sum($alertas_tipos)) * 100, 0);
+        }
+
+        // Últimas alertas
         $ultimas_alertas = Alerta::orderBy('timestamp_evento', 'desc')
             ->limit(5)
             ->get();
-        
+
         return [
-                'horas' => $horas,
-                'accesos_data' => $accesos_data,
-                'tipo_alertas' => $tipo_alertas,
-                'diferencia_alertas' => $diferencia_alertas,
-                'top_ips' => $top_ips,
-                'alertas_tipos' => $alertas_tipos,
-                'portencajes' => $portencajes,
-                'ultimas_alertas' => $ultimas_alertas,
-                'prioridades' => Alerta::prioridadTexto()
-            ];
-        
-    
-    
+            'horas'              => $horas,
+            'accesos_data'       => $accesos_data,
+            'tipo_alertas'       => $tipo_alertas,
+            'diferencia_alertas' => $diferencia_alertas,
+            'top_ips'            => $top_ips,
+            'alertas_tipos'      => $alertas_tipos,
+            'portencajes'        => $portencajes,
+            'ultimas_alertas'    => $ultimas_alertas,
+            'prioridades'        => Alerta::prioridadTexto()
+        ];
     }
-        
 
     public function index()
     {
         $data = $this->calculos();
         return view('dashboard', $data);
-        
     }
 }
