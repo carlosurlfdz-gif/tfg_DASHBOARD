@@ -10,30 +10,37 @@ use App\Models\Alerta;
 class AlertasController extends Controller
 {
     public function index()
-{
-    $alertas = Alerta::orderBy('timestamp_evento', 'desc')->paginate(50);
-    $prioridades = Alerta::prioridadTexto();
+    {
+        $alertas = Alerta::orderBy('timestamp_evento', 'desc')->paginate(50);
+        $prioridades = Alerta::prioridadTexto();
 
-    return view('alertas', compact('alertas', 'prioridades'));
-}
-
-public function filtrar(Request $request)
-{
-    $query = Alerta::query();
-
-    if ($request->filled('buscar')) {
-        $query->where('categoria', 'like', '%' . $request->buscar . '%');
-    }
-    if ($request->filled('prioridad')) {
-        $query->where('severity', $request->prioridad);
-    }
-    if ($request->filled('tipo')) {
-        $query->where('tipo', $request->tipo);
+        return view('alertas', compact('alertas', 'prioridades'));
     }
 
-    $alertas = $query->orderBy('timestamp_evento', 'desc')->paginate(50);
-    $prioridades = Alerta::prioridadTexto();
+    public function filtrar(Request $request)
+    {
+        $query = Alerta::query();
+        //Buscar por categoría
+        if ($request->filled('buscar')) {
+            $query->where('categoria', 'like', '%' . $request->buscar . '%');
+        }
+        if ($request->filled('prioridad')) {
+            $query->where('severity_label', $request->prioridad); // ← CAMBIADO
+        }
+        if ($request->filled('tipo')) {
+            $query->where('tipo', $request->tipo);
+        }
 
-    return view('alertas', compact('alertas', 'prioridades'));
-}
+        $alertas = $query->orderBy('timestamp_evento', 'desc')->paginate(50); // ← CAMBIADO
+        $prioridades= Alerta::prioridadTexto();
+
+        return view('alertas', compact('alertas', 'prioridades'));
+    }
+
+    public function destroy(Alerta $alerta)
+    {
+        $alerta->delete();
+
+        return redirect()->route('alertas')->with('success', 'Alerta eliminada correctamente.');
+    }
 }

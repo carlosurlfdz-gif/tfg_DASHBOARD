@@ -164,7 +164,7 @@
                             class="text-{{ $alerta->severity == 1 ? 'red' : ($alerta->severity == 2 ? 'yellow' : ($alerta->severity == 3 ? 'blue' : 'green')) }}-400 text-sm">
                             {{-- {{ $alerta->severity == 1 ? 'CRÍTICA' : ($alerta->severity == 2 ? 'ALTA' : ($alerta->severity
                             == 3 ? 'MEDIA' : 'BAJA')) }} --}}
-                            {{ $prioridades[$alerta->severity] }}
+                            {{ $alerta->severity_label ?? 'DESCONOCIDA' }}
                         </p>
 
                         <p class="mt-1">

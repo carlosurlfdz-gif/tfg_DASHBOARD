@@ -304,7 +304,7 @@
                         </article>
 
                     @endforeach
-                        {{ $alertas->links() }}
+
                 </div>
 
             @endif

@@ -15,7 +15,7 @@ class Alerta extends Model
     ]; 
 
     public static function prioridadTexto() {
-        return [1=> "CRÍTICA", 2=> "ALTA", 3=> "MEDIA", 4=> "BAJA"];
+        return ['Critica' => 'CRÍTICA', 'Alta' => 'ALTA', 'Media' => 'MEDIA', 'Baja' => 'BAJA'];
     }
 
     
